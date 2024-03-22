@@ -19,9 +19,6 @@ jobs:
         sudo apt-get update
         sudo apt-get install git
 
-    - name: Clone DagsHub repository
-      run: |
-        git clone https://dagshub.com/harshitbudakotimatsc20/credit_card_fraud_ML.git
     - name: Install Java JDK
       run: |
         sudo apt-get update --fix-missing
@@ -37,13 +34,26 @@ jobs:
         pip install -q findspark
         pip install pyspark==3.5.1
 
+    - name: Install DVC
+      run: |
+        pip install dvc
+
+    - name: Configure DVC
+      run: |
+        dvc remote modify origin --local user ${{ secrets.DAGSHUB_USERNAME }}
+        dvc remote modify origin --local password ${{ secrets.DAGSHUB_PASSWORD }}
+
+    - name: Pull data
+      run: |
+        dvc pull
+
     - name: Run transformation scripts
       run: |
-        python preprocessingofdata.py *** *** ${{ secrets.DATASET1_PATH }} ${{ secrets.DATASET2_PATH }}
-        python encodingoftestdata.py *** *** ${{ secrets.DATASET3_PATH }} ${{ secrets.DATASET4_PATH }}
+        python preprocessingofdata.py ${{ secrets.DATASET1_PATH }} ${{ secrets.DATASET2_PATH }}
+        python encodingoftestdata.py ${{ secrets.DATASET3_PATH }} ${{ secrets.DATASET4_PATH }}
 
     - name: Load model and make predictions
-      run: predictions.py *** *** ${{ secrets.DATASET5_PATH }}
+      run: python predictions.py ${{ secrets.DATASET5_PATH }}
       env:
         MLFLOW_TRACKING_URI: https://dagshub.com/harshitbudakotimatsc20/credit_card_fraud_ML.mlflow
         MLFLOW_S3_ENDPOINT_URL: https://dagshub.com/harshitbudakotimatsc20/credit_card_fraud_ML.dvc
