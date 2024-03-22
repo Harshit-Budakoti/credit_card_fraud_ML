@@ -39,11 +39,11 @@ jobs:
 
     - name: Run transformation scripts
       run: |
-        python s3://credit_card_fraud_ML/preprocessingofdata.py ${{ secrets.DATASET1_PATH }} ${{ secrets.DATASET2_PATH }}
-        python s3://credit_card_fraud_ML/encodingoftestdata.py ${{ secrets.DATASET3_PATH }} ${{ secrets.DATASET4_PATH }}
+        python preprocessingofdata.py *** *** ${{ secrets.DATASET1_PATH }} ${{ secrets.DATASET2_PATH }}
+        python encodingoftestdata.py *** *** ${{ secrets.DATASET3_PATH }} ${{ secrets.DATASET4_PATH }}
 
     - name: Load model and make predictions
-      run: python s3://credit_card_fraud_ML/predictions.py ${{ secrets.DATASET5_PATH }}
+      run: predictions.py *** *** ${{ secrets.DATASET5_PATH }}
       env:
         MLFLOW_TRACKING_URI: https://dagshub.com/harshitbudakotimatsc20/credit_card_fraud_ML.mlflow
         MLFLOW_S3_ENDPOINT_URL: https://dagshub.com/harshitbudakotimatsc20/credit_card_fraud_ML.dvc
