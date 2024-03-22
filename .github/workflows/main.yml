@@ -33,7 +33,8 @@ jobs:
       run: |
         pip install -q findspark
         pip install pyspark==3.5.1
-
+        pip install dagshub
+        pip install xgboost
     - name: Install DVC
       run: |
         pip install dvc
@@ -56,9 +57,18 @@ jobs:
       run: |
         python preprocessingofdata.py ${{ secrets.DATASET1_PATH }} ${{ secrets.DATASET2_PATH }}
         python encodingoftestdata.py ${{ secrets.DATASET3_PATH }} ${{ secrets.DATASET4_PATH }}
+      env:
+        CONFIG_PATH: ${{ github.workspace }}/config.json
+
 
     - name: Load model and make predictions
-      run: python predictions.py ${{ secrets.DATASET5_PATH }}
+      run: python model_predictions.py ${{ secrets.DATASET6_PATH }} ${{ secrets.DATASET7_PATH }}
+
+    - name: Update and push files
+      run: |
+        dvc add s3://credit_card_fraud_ML/processed_old_data.parquet s3://credit_card_fraud_ML/processed_new_data.parquet 's3://credit_card_fraud_ML/encoded_past_data.parquet s3://credit_card_fraud_ML/encoded_new_data.parquet s3://credit_card_fraud_ML/latest_predictions.parquet
+        dvc commit -f
+        dvc push
       env:
         MLFLOW_TRACKING_URI: https://dagshub.com/harshitbudakotimatsc20/credit_card_fraud_ML.mlflow
         MLFLOW_S3_ENDPOINT_URL: https://dagshub.com/harshitbudakotimatsc20/credit_card_fraud_ML.dvc
