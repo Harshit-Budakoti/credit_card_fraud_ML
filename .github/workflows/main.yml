@@ -10,11 +10,24 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
+    - name: Checkout Dagshub repository
+      uses: actions/checkout@v2
+      with:
+        repository: harshitbudakotimatsc20/credit_card_fraud_ML
+        token: ${{ secrets.DAGSHUB_ACCESS_TOKEN }}
+
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
         python-version: '3.x'
+    - name: Install git
+      run: |
+        sudo apt-get update
+        sudo apt-get install git
 
+    - name: Clone DagsHub repository
+      run: |
+        git clone https://dagshub.com/harshitbudakotimatsc20/credit_card_fraud_ML.git
     - name: Install Java JDK
       run: |
         sudo apt-get update --fix-missing
