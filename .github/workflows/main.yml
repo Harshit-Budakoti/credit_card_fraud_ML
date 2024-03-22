@@ -44,12 +44,9 @@ jobs:
 
     - name: Configure DVC
       run: |
+        dvc remote add origin https://dagshub.com/harshitbudakotimatsc20/credit_card_fraud_ML.dvc
         dvc remote modify origin user ${{ secrets.DAGSHUB_USERNAME }}
         dvc remote modify origin password ${{ secrets.DAGSHUB_PASSWORD }}
-
-    - name: Check DVC Status
-      run: |
-        dvc status
 
     - name: Pull data
       run: |
