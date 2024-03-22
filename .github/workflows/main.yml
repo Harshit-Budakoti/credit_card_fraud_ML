@@ -60,13 +60,13 @@ jobs:
 
     - name: Run transformation scripts
       run: |
-        python preprocessingofdata.py ${{ secrets.DATASET1_PATH }} ${{ secrets.DATASET2_PATH }}
-        python encodingoftestdata.py ${{ secrets.DATASET3_PATH }} ${{ secrets.DATASET4_PATH }}
+        python credit_card_fraud_ML/preprocessingofdata.py ${{ secrets.DATASET1_PATH }} ${{ secrets.DATASET2_PATH }}
+        python credit_card_fraud_ML/encodingoftestdata.py ${{ secrets.DATASET3_PATH }} ${{ secrets.DATASET4_PATH }}
       env:
         CONFIG_PATH: ${{ github.workspace }}/config.json
 
     - name: Load model and make predictions
-      run: python model_predictions.py ${{ secrets.DATASET6_PATH }} ${{ secrets.DATASET7_PATH }}
+      run: python credit_card_fraud_ML/model_predictions.py ${{ secrets.DATASET6_PATH }} ${{ secrets.DATASET7_PATH }}
 
     - name: Update and push files
       run: |
