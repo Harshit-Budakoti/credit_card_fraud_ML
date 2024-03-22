@@ -38,11 +38,18 @@ jobs:
       run: |
         pip install dvc
 
+    - name: Initialize DVC
+      run: |
+        dvc init
+
     - name: Configure DVC
       run: |
         dvc remote modify origin user ${{ secrets.DAGSHUB_USERNAME }}
         dvc remote modify origin password ${{ secrets.DAGSHUB_PASSWORD }}
 
+    - name: Check DVC Status
+      run: |
+        dvc status
 
     - name: Pull data
       run: |
