@@ -1,0 +1,9 @@
+{
+ "maxDepth": 7,
+ "numTrees": 400,
+ "subsample": 0.7,
+ "gamma": 0.3,
+ "learning_rate": 0.05,
+ "scalePosWeight": 200,
+ "reg_lambda": 10
+}
