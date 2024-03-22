@@ -40,8 +40,9 @@ jobs:
 
     - name: Configure DVC
       run: |
-        dvc remote modify origin --local user ${{ secrets.DAGSHUB_USERNAME }}
-        dvc remote modify origin --local password ${{ secrets.DAGSHUB_PASSWORD }}
+        dvc remote modify origin user ${{ secrets.DAGSHUB_USERNAME }}
+        dvc remote modify origin password ${{ secrets.DAGSHUB_PASSWORD }}
+
 
     - name: Pull data
       run: |
