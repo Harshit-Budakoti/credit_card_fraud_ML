@@ -60,14 +60,15 @@ jobs:
 
     - name: Run transformation scripts
       run: |
-        python credit_card_fraud_ML/preprocessingofdata.py ${{ secrets.DATASET1_PATH }} ${{ secrets.DATASET2_PATH }}
-        python credit_card_fraud_ML/encodingoftestdata.py ${{ secrets.DATASET3_PATH }} ${{ secrets.DATASET4_PATH }}
+        python preprocessingofdata.py ${{ secrets.DATASET1_PATH }} ${{ secrets.DATASET2_PATH }}
+        python encodingoftestdata.py ${{ secrets.DATASET3_PATH }} ${{ secrets.DATASET4_PATH }}
       env:
         CONFIG_PATH: ${{ github.workspace }}/config.json
-
+        DAGSHUB_ACCESS_KEY_ID: ${{ secrets.DAGSHUB_ACCESS_KEY }}
     - name: Load model and make predictions
-      run: python credit_card_fraud_ML/model_predictions.py ${{ secrets.DATASET6_PATH }} ${{ secrets.DATASET7_PATH }}
-
+      run: python model_predictions.py ${{ secrets.DATASET6_PATH }} ${{ secrets.DATASET7_PATH }}
+      env:
+        DAGSHUB_ACCESS_KEY_ID: ${{ secrets.DAGSHUB_ACCESS_KEY }}
     - name: Update and push files
       run: |
         dvc add s3://credit_card_fraud_ML/processed_old_data.parquet s3://credit_card_fraud_ML/processed_new_data.parquet 's3://credit_card_fraud_ML/encoded_past_data.parquet s3://credit_card_fraud_ML/encoded_new_data.parquet s3://credit_card_fraud_ML/latest_predictions.parquet
