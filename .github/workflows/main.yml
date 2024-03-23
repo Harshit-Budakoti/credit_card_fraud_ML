@@ -68,6 +68,7 @@ jobs:
     - name: Load model and make predictions
       run: python model_predictions.py ${{ secrets.DATASET6_PATH }} ${{ secrets.DATASET7_PATH }}
       env:
+        CONFIG_PATH: ${{ github.workspace }}/config.json
         DAGSHUB_ACCESS_KEY_ID: ${{ secrets.DAGSHUB_ACCESS_KEY }}
     - name: Update and push files
       run: |
