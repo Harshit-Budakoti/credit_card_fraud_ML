@@ -57,7 +57,19 @@ jobs:
       run: |
         git clone https://dagshub.com/harshitbudakotimatsc20/credit_card_fraud_ML.git
         cd credit_card_fraud_ML
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-region: us-east-1
+        aws-session-token: ${{ secrets.DAGSHUB_TOKEN }}
+        aws-endpoint-url: https://dagshub.com/api/v1/repo-buckets/s3/${{ secrets.DAGSHUB_USERNAME }}
 
+
+    - name: Download Python scripts from DagsHub
+      run: |
+        aws s3 cp s3://credit_card_fraud_ML/preprocessingofdata.py 
+        aws s3 cp s3://credit_card_fraud_ML/encodingoftestdata.py 
+        aws s3 cp s3://credit_card_fraud_ML/model_predictions.py 
     - name: Run transformation scripts
       run: |
         python preprocessingofdata.py ${{ secrets.DATASET1_PATH }} ${{ secrets.DATASET2_PATH }}
