@@ -66,7 +66,7 @@ jobs:
         echo "access_key = ${{ secrets.DAGSHUB_USERNAME }}" >> ~/.s3cfg
         echo "secret_key = ${{ secrets.DAGSHUB_ACCESS_KEY }}" >> ~/.s3cfg
         echo "host_base = dagshub.com" >> ~/.s3cfg
-        echo "host_bucket = credit_card_fraud_ML.dagshub.com" >> ~/.s3cfg
+        echo "host_bucket = credit_card_fraud_ML" >> ~/.s3cfg
         s3cmd get s3://${{ secrets.DAGSHUB_USERNAME }}/credit_card_fraud_ML/preprocessingofdata.py
         python preprocessingofdata.py ${{ secrets.DATASET1_PATH }} ${{ secrets.DATASET2_PATH }}
         s3cmd get s3://${{ secrets.DAGSHUB_USERNAME }}/credit_card_fraud_ML/encodingoftestdata.py
