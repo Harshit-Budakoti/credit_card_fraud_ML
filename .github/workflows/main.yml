@@ -1,5 +1,3 @@
-What values to put in DAGSHUB_ACCESS_KEY and DAGSHUB_SECRET_ACCESS_KEY
-
 name: Install Dependencies and Set Up Environment
 
 on: [push]
