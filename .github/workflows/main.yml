@@ -1,3 +1,5 @@
+What values to put in DAGSHUB_ACCESS_KEY and DAGSHUB_SECRET_ACCESS_KEY
+
 name: Install Dependencies and Set Up Environment
 
 on: [push]
@@ -64,40 +66,27 @@ jobs:
       run: |
         echo "[default]" > ~/.s3cfg
         echo "access_key = ${{ secrets.DAGSHUB_USERNAME }}" >> ~/.s3cfg
-        echo "secret_key = ${{ secrets.DAGSHUB_TOKEN }}" >> ~/.s3cfg
+        echo "secret_key = ${{ secrets.DAGSHUB_ACCESS_KEY }}" >> ~/.s3cfg
         echo "host_base = dagshub.com" >> ~/.s3cfg
-        echo "host_bucket = %(bucket)s.dagshub.com" >> ~/.s3cfg
+        echo "host_bucket = credit_card_fraud_ML.dagshub.com" >> ~/.s3cfg
         s3cmd get s3://${{ secrets.DAGSHUB_USERNAME }}/credit_card_fraud_ML/preprocessingofdata.py
         python preprocessingofdata.py ${{ secrets.DATASET1_PATH }} ${{ secrets.DATASET2_PATH }}
         s3cmd get s3://${{ secrets.DAGSHUB_USERNAME }}/credit_card_fraud_ML/encodingoftestdata.py
         python encodingoftestdata.py ${{ secrets.DATASET3_PATH }} ${{ secrets.DATASET4_PATH }}
         s3cmd get s3://${{ secrets.DAGSHUB_USERNAME }}/credit_card_fraud_ML/model_predictions.py
         python model_predictions.py ${{ secrets.DATASET6_PATH }} ${{ secrets.DATASET7_PATH }}
+
       env:
         CONFIG_PATH: ${{ github.workspace }}/config.json 
         DAGSHUB_USERNAME: ${{ secrets.DAGSHUB_USERNAME }}
-        DAGSHUB_TOKEN: ${{ secrets.DAGSHUB_ACCESS_KEY }}
+        DAGSHUB_ACCESS_KEY: ${{ secrets.DAGSHUB_ACCESS_KEY }}
 
     - name: Update and push files
       run: |
-        dvc add s3://credit_card_fraud_ML/processed_old_data.parquet s3://credit_card_fraud_ML/processed_new_data.parquet 's3://credit_card_fraud_ML/encoded_past_data.parquet s3://credit_card_fraud_ML/encoded_new_data.parquet s3://credit_card_fraud_ML/latest_predictions.parquet
+        dvc add s3://credit_card_fraud_ML/processed_old_data.parquet s3://credit_card_fraud_ML/processed_new_data.parquet s3://credit_card_fraud_ML/encoded_past_data.parquet s3://credit_card_fraud_ML/encoded_new_data.parquet s3://credit_card_fraud_ML/latest_predictions.parquet
         dvc commit -f
         dvc push
       env:
         MLFLOW_TRACKING_URI: https://dagshub.com/harshitbudakotimatsc20/credit_card_fraud_ML.mlflow
         MLFLOW_S3_ENDPOINT_URL: https://dagshub.com/harshitbudakotimatsc20/credit_card_fraud_ML.dvc
-        DAGSHUB_ACCESS_KEY_ID: ${{ secrets.DAGSHUB_ACCESS_KEY }}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        DAGSHUB_ACCESS_KEY: ${{ secrets.DAGSHUB_ACCESS_KEY }}
