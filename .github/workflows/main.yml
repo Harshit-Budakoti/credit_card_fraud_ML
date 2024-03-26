@@ -57,6 +57,9 @@ jobs:
       run: |
         git clone https://dagshub.com/harshitbudakotimatsc20/credit_card_fraud_ML.git
         cd credit_card_fraud_ML
+    - name: Install s3cmd
+      run: |
+        sudo apt-get install s3cmd
     - name: Download and run scripts from DAGsHub Storage
       run: |
         echo "[default]" > ~/.s3cfg
